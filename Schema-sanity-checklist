@@ -1,0 +1,87 @@
+# 📝 Rails + PostgreSQL Schema Sanity Checklist
+
+1️⃣ Initial Setup
+
+ Decide if you need a custom schema (multi-tenant, logical separation, or just experimenting)
+
+ Add a migration to create the schema:
+
+class CreateCustomSchema < ActiveRecord::Migration[8.1]
+  def up
+    execute "CREATE SCHEMA IF NOT EXISTS my_schema"
+  end
+
+  def down
+    execute "DROP SCHEMA IF EXISTS my_schema CASCADE"
+  end
+end
+
+
+ Set schema_search_path in database.yml:
+
+development:
+  schema_search_path: my_schema,public
+
+test:
+  schema_search_path: my_schema,public
+
+2️⃣ Table Creation
+
+ Create tables inside the schema:
+
+create_table "my_schema.users" do |t|
+  t.string :name
+  t.timestamps
+end
+
+
+ Or rely on search_path and unqualified names; tables will go into the first schema in the path.
+
+3️⃣ Migrations & Database Rebuild
+
+ Use rails db:migrate instead of db:schema:load for custom schemas
+
+ If resetting DB, drop and recreate before running migrations:
+
+rails db:drop
+rails db:create
+rails db:migrate
+
+
+ Verify schema exists:
+
+\dn         -- lists schemas
+\dt my_schema.*  -- lists tables
+## To set custom schema:
+```
+SET search_path TO utech;
+```
+
+4️⃣ schema.rb vs structure.sql
+
+ Empty schemas will not appear in schema.rb
+
+ If you need full fidelity (including empty schemas, triggers, views, functions):
+
+# config/application.rb
+config.active_record.schema_format = :sql
+
+
+ Dump structure:
+
+rails db:structure:dump
+
+5️⃣ Common Pitfalls
+Issue	Cause	Fix
+Schema missing in schema.rb	Empty schema / not referenced	Create at least one table OR use :sql format
+Tables still in public	Default search_path	Set schema_search_path to include custom schema
+Migration shows “up” but schema missing	db:schema:load / schema.rb used to recreate DB	Re-run migration or rebuild DB with db:migrate
+6️⃣ Environment & Team
+
+ Ensure schema_search_path is consistent across development, test, and production
+
+ Include migration and DB reset instructions in README
+
+ Keep pitfalls and notes in docs/pitfalls/database-pitfalls.md
+
+✅ Following this checklist will make your custom schemas behave consistently across all environments and Rails versions.
