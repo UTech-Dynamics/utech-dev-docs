@@ -73,9 +73,11 @@ If you rely on build for validations that depend on id or database constraints, 
 4. Quick Reference Table
 
 ```
-Method	ID assigned?	DB constraints enforced?	Speed	Use case
-build	❌	❌	Fast	In-memory validation tests
-create	✅	✅	Slower	DB-level validation, associations, realistic tests
+| Method   | ID assigned? | DB constraints enforced? | Speed  | Use case                                           |
+| -------- | ------------ | ------------------------ | ------ | -------------------------------------------------- |
+| `build`  | ❌           | ❌                       | Fast   | In-memory validation tests                         |
+| `create` | ✅           | ✅                       | Slower | DB-level validation, associations, realistic tests |
+
 ```
 
 5. Visual Flow Diagram
