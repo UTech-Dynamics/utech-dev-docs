@@ -203,7 +203,7 @@ README should reference the core operating docs:
 Recommended links:
 
 - [Engineering & Release Guidelines](engineering-guidelines.md)
-- [Rails Model Spec Standards](model_spec_standards.md)
+- [Rails Model Spec Standards](model-spec-standards.md)
 - [Testing Roadmap](architecture/testing_roadmap.md)
 - [Rails Testing Reference](test/rails_testing_reference.md)
 

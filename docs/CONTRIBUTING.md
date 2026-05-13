@@ -1,35 +1,19 @@
-We follow a Conventional Commit–style taxonomy:
+## Contributing
 
-feat      – new API behavior
-fix       – bug fixes
-refactor  – structure only, no behavior change
-perf      – performance improvements
-db        – schema-level changes
-seed      – seed data
-chore     – tooling and maintenance
+Start with the standards in [engineering-guidelines.md](engineering-guidelines.md).
 
-Each commit must have a single primary intent.
-----------
-| Change type                | Commit type |
-| -------------------------- | ----------- |
-| Add column for new feature | `feat`      |
-| Fix bad schema             | `fix`       |
-| Pure optimization (index)  | `perf`      |
-| Structural cleanup         | `db`        |
-----------
-What NOT to do (common mistakes)
+For commit messages, use the repository's minimal Conventional Commit style:
 
-❌ Vague:
+- `feat`: new behavior
+- `fix`: bug fixes
+- `chore`: maintenance and tooling
+- `db`: schema-level changes when needed
+- `seed`: seed data
+- `perf`: performance improvements
+- `refactor`: structure-only changes
 
-update code
-final changes
-improvements
+Rules:
 
-
-❌ Mixed intent:
-
-feat: add bulk update and refactor controller
-
-
-→ split commits.
--------------
+- Keep one commit focused on one intent
+- Avoid vague messages like `update code` or `final changes`
+- Split mixed work into separate commits

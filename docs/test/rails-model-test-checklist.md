@@ -1,5 +1,6 @@
-✅ Rails Model Test Checklist (API + PostgreSQL)
-1️⃣ Database-Level Integrity (Most Important)
+## Rails Model Test Checklist (API + PostgreSQL)
+
+### 1. Database-Level Integrity
 
 These must always exist in DB and be tested when critical.
 
@@ -44,7 +45,7 @@ null: false if required
 
 Test behavior if association is mandatory.
 
-2️⃣ Model Validations
+### 2. Model Validations
 
 For every validated attribute:
 
@@ -62,7 +63,7 @@ Valid case
 
 Invalid case
 
-3️⃣ Associations
+### 3. Associations
 
 For each association:
 
@@ -90,7 +91,7 @@ Example (your case):
 
 expect { brand.destroy }
   .to raise_error(ActiveRecord::DeleteRestrictionError)
-4️⃣ Business Rules
+### 4. Business Rules
 
 Anything domain-specific must be tested.
 
@@ -106,7 +107,7 @@ Order total must match sum of items
 
 If it is business logic, it must have a spec.
 
-5️⃣ Scopes
+### 5. Scopes
 
 For every scope:
 
@@ -118,7 +119,7 @@ Example:
 
 expect(Brand.active).to include(active_brand)
 expect(Brand.active).not_to include(inactive_brand)
-6️⃣ Callbacks
+### 6. Callbacks
 
 If model has:
 
@@ -135,7 +136,7 @@ You must test:
 ☐ It runs
 ☐ It produces expected side effect
 ☐ It does not break data integrity
-7️⃣ Methods (Instance + Class)
+### 7. Methods (Instance + Class)
 
 Every public method must have:
 
@@ -148,7 +149,7 @@ Example:
 describe '#full_name' do
   it 'combines first and last name'
 end
-8️⃣ Schema Namespace Safety (Important in Your Setup)
+### 8. Schema Namespace Safety
 
 Because you use:
 
@@ -168,7 +169,7 @@ production
 
 You already experienced this pitfall earlier — so this belongs in your checklist permanently.
 
-9️⃣ Factory Safety
+### 9. Factory Safety
 
 For every factory:
 
@@ -178,7 +179,7 @@ expect(build(:brand)).to be_valid
 
 Use sequences for unique fields.
 
-🔟 Security-Sensitive Models (Admin, Auth)
+### 10. Security-Sensitive Models (Admin, Auth)
 
 For models like Admin:
 
@@ -190,7 +191,7 @@ For models like Admin:
 
 You’re already doing this properly in your auth specs.
 
-🔎 Advanced (Senior-Level Discipline)
+### Advanced (Senior-Level Discipline)
 
 Optional but strong practice:
 
@@ -198,7 +199,7 @@ Optional but strong practice:
 ☐ Test that validation error messages are correct (if API depends on them)
 ☐ Race-condition safety for uniqueness
 ☐ Transaction rollback behavior tested
-📌 Minimal Rule to Never Miss Anything
+### Minimal Rule to Never Miss Anything
 
 For every new model, ask:
 

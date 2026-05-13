@@ -1,8 +1,8 @@
 # Thinking vs Coding Checklist
 
-## 1️⃣ Before Writing Code (Thinking / Design Stage)
+## Before Writing Code
 
-***Goal: Avoid mistakes that are expensive later.***
+Goal: avoid mistakes that are expensive later.
 
 Example Tasks:
 ```
@@ -18,7 +18,7 @@ Edge Cases	                What happens if rules are violated?	            Tryin
 ```
 Outcome: You should be able to sketch the table schema, relationships, and constraints on paper or mentally.
 
-## 2️⃣ While Writing Code (Implementation Stage)
+## While Writing Code
 
 Goal: Translate your design into working DB & code safely.
 
@@ -34,7 +34,7 @@ Goal: Translate your design into working DB & code safely.
 
 Tip: If you already thought about edge cases, coding becomes mechanical.
 
-##  3️⃣ After Writing Code (Validation / Testing Stage)
+## After Writing Code
 
 - Ensure constraints work (try inserting invalid data).
 
@@ -44,7 +44,7 @@ Tip: If you already thought about edge cases, coding becomes mechanical.
 
 - Test lifecycle transitions (active → discontinued → archived).
 
-##  4️⃣ How to Measure Productivity
+## How to Measure Productivity
 
 - Time spent thinking/design is not wasted.
 

@@ -1,10 +1,10 @@
-FactoryBot: build vs create in Rails
+## FactoryBot: build vs create in Rails
 
-When writing model specs in Rails using FactoryBot, it’s important to understand the difference between build and create. Choosing the wrong one can lead to false positives or unexpected behavior in validations and database tests.
+Choosing the wrong FactoryBot method can lead to false positives or tests that accidentally depend on the database.
 
-1. build
+### 1. `build`
 
-```
+```ruby
 category = build(:category)
 ```
 
@@ -16,7 +16,7 @@ category.id is nil (no DB assignment yet).
 
 Validations run only if you explicitly call category.valid? or category.save.
 
-Associations depending on persisted IDs (like parent_id) may not work as expected.
+Associations depending on persisted IDs may not work as expected.
 
 Fast and lightweight, ideal for pure model unit tests.
 
@@ -28,9 +28,9 @@ Avoiding database overhead in fast unit tests.
 
 Cases where DB constraints or foreign keys are not required.
 
-2. create
+### 2. `create`
 
-```
+```ruby
 category = create(:category)
 ```
 
@@ -52,35 +52,32 @@ Testing associations like parent-child.
 
 Simulating real-world scenarios where the record must exist in the database.
 
-3. Why it matters
+### 3. Why it matters
 
-Example: Preventing a category from referencing itself as parent.
+Example: preventing a category from referencing itself as parent.
 
-```
-# Using build (fails silently because id is nil)
+```ruby
+# Using build (may not exercise the real constraint)
 category = build(:category)
-category.parent_id = category.id   # category.id is nil
-category.valid?                    # validation may not trigger
+category.parent = category
+category.valid?
 
-# Using create (works correctly)
+# Using create (exercises the real constraint)
 category = create(:category)
-category.parent_id = category.id   # now category.id is real
-category.valid?                    # triggers "cannot reference itself"
+category.parent = category
+category.valid?
 ```
 
 If you rely on build for validations that depend on id or database constraints, the test can pass incorrectly.
 
-4. Quick Reference Table
+### 4. Quick Reference Table
 
-```
 | Method   | ID assigned? | DB constraints enforced? | Speed  | Use case                                           |
 | -------- | ------------ | ------------------------ | ------ | -------------------------------------------------- |
 | `build`  | ❌           | ❌                       | Fast   | In-memory validation tests                         |
 | `create` | ✅           | ✅                       | Slower | DB-level validation, associations, realistic tests |
 
-```
-
-5. Visual Flow Diagram
+### 5. Visual Flow Diagram
 
 ```
         +-------------------+
@@ -114,7 +111,7 @@ If you rely on build for validations that depend on id or database constraints, 
        +--------------------------+
 ```
 
-6. Recommendation for Specs
+### 6. Recommendation for Specs
 
 Use build for fast unit tests that only validate attributes.
 
@@ -123,21 +120,21 @@ Use create for tests depending on IDs, database constraints, or associations.
 Always verify self-referencing associations or DB-level uniqueness with create.
 
 
-7. Practical Example: Self-Parent Validation
+### 7. Practical Example: Self-Parent Validation
 
-# Correct way to test that a category cannot reference itself as parent
+Correct way to test that a category cannot reference itself as parent:
 
-```
+```ruby
 RSpec.describe Category, type: :model do
   it 'is invalid if parent references itself' do
-    # Persisted category ensures id is assigned
+    # Persisted category ensures the association is exercised realistically
     category = create(:category, name: 'SelfParent')
 
     # Assign itself as parent
     category.parent = category
 
     # Validation should fail
-    expect(category).not_to be_valid
+    expect(category).to be_invalid
     expect(category.errors[:parent]).to include('cannot reference itself')
   end
 end
